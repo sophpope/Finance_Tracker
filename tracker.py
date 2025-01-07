@@ -1,8 +1,12 @@
 class Expense:
-    def __init__(self, date, description, amount):
+    def __init__(self, date, category, description, amount):
         self.date = date
         self.description = description
+        self.category = category
         self.amount = amount
+
+        
+    
 
 class FinanceTracker:
     def __init__(self):
@@ -25,7 +29,7 @@ class FinanceTracker:
         else:
             print("Expense List:")
             for i, expense in enumerate(self.expenses, start=1):
-                print(f"{i}. Date: {expense.date}, Description: {expense.description}")
+                print(f"{i}. Date: {expense.date}, Category: {expense.category}, Description: {expense.description}")
 
     def total_expenses(self):
         total = sum(expense.amount for expense in self.expenses)
@@ -33,6 +37,23 @@ class FinanceTracker:
 
 def main():
     tracker = FinanceTracker()
+
+    categories = [
+            "Groceries 🛒",
+            "Eating Out 🍽️",
+            "Takeaway 🥡",
+            "Entertainment 🎭",
+            "Activity 💃",
+            "Exersize 🏋️‍♀️",
+            "Clothes 👚",
+            "Beauty 💄",
+            "Electronic 📱",
+            "Car Maintenance 🚗",
+            "Utilities 💡",
+            "Housing 🏡",
+            "Medical 🏥",
+            "Misc ❓"
+        ]
 
     while True:
         print("\n Finance Tracker Menu:")
@@ -46,9 +67,12 @@ def main():
 
         if choice == "1":
             date = input("Enter the date (YYYY-MM-DD): ")
+            for i, category_name in enumerate(categories):
+                print(f"{i}. {category_name}")
+            category = input("Enter the category index: ")
             description = input("Enter the description: ")
             amount = float(input("Enter the amount in £: "))
-            expense = Expense(date, description, amount)
+            expense = Expense(date, category, description, amount)
             tracker.add_expense(expense)
 
         elif choice == "2":
