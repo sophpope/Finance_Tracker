@@ -28,8 +28,20 @@ class Expenses:
 
         all_expenses = self.db.fetch_all(query)
 
-        for expense in all_expenses:
-            print(expense)
+        print("--- ALL EXPENSES ---")
+
+        for expense_id, amount, description, category, expense_date in all_expenses:
+            print(
+                f"ID: {expense_id}"
+                f"\nAmount: £{amount}"
+                f"\nDescription: {description}"
+                f"\nCategory: {category}"
+                f"\nDate: {expense_date}"
+                "\n--------------------------")
+                  
+              
+
+        
     
     def remove_expense(self, expense_id):
         query = """
