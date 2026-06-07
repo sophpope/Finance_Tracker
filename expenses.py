@@ -5,7 +5,10 @@ class Expenses:
         self.db = db
 
     #adding expenses to the database, %s is used as placeholder in psycopg2
-    def add_expense(self, amount, description, category_id):
+    def add_expense(self):
+        amount = float(input("Enter expense amount: £"))
+        description = input("Enter expense description:")
+        category_id = int(input("Enter category ID:"))
         query = """
         INSERT INTO expenses (amount, description, category_id)
         VALUES(%s, %s, %s)"""
@@ -23,7 +26,10 @@ class Expenses:
 
         """
 
-        return self.db.fetch_all(query)
+        all_expenses = self.db.fetch_all(query)
+
+        for expense in all_expenses:
+            print(expense)
     
     def remove_expense(self, expense_id):
         query = """
