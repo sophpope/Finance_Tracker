@@ -43,14 +43,16 @@ class Expenses:
 
         
     
-    def remove_expense(self, expense_id):
+    def remove_expense(self):
+        expense_id = int(input("Please enter the Expense ID you would like to remove: "))
+
         query = """
         DELETE FROM expenses
             WHERE expense_id = %s
             """
-        self.db.execute(query, (expense_id))
+        self.db.execute(query, (expense_id,))
 
-        print("Expense removed successfully")
+        print(f"Expense {expense_id} removed successfully")
 
     #shows the total of all the expenses, using COALESCE to prevent null values, if no expenses
     def total_expenses(self):
