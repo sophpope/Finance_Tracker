@@ -40,9 +40,9 @@ class Income:
     def remove_income(self):
         income_id = int(input("Please enter the Income ID you would like to remove: "))
 
-        query = """DELETE FROM income WHERE income_id = %s"""
+        query = """DELETE FROM incomes WHERE income_id = %s"""
 
-        self.db.execute(query, (income_id))
+        self.db.execute(query, (income_id,))
 
         print(f"Income {income_id} remove sucessfully")
 
