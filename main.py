@@ -1,11 +1,14 @@
 from db_utils import Database
 from expenses import Expenses
+from income import Income
+import time
 
 
 def main():
     db = Database()
 
     expenses = Expenses(db)
+    income = Income(db)
 
     while True:
         print("\n Finance Tracker Menu:")
@@ -13,10 +16,12 @@ def main():
         print("2. Remove Expense")
         print("3. View Expenses")
         print("4. Add Income")
-        print("5. View Monthly Summary")
-        print("6. View Spending by Category")
-        print("7. Set Budget")
-        print("8. Exit")
+        print("5. Remove Income")
+        print("6. View Income")
+        print("7. View Monthly Summary")
+        print("8. View Spending by Category")
+        print("9. Set Budget")
+        print("10. Exit")
 
         choice = input("Enter your choice (1-8): ")
 
@@ -30,27 +35,34 @@ def main():
             expenses.view_expenses()
 
         elif choice == '4':
-            pass
-            #add when i've added function/query for adding income
+            income.add_income()
 
         elif choice == '5':
-            pass
-            #add when i've got a function/query for monthly summary
+            income.remove_income()
 
         elif choice == '6':
-            pass
-            #add when i've got a function query for spending by category
+            income.view_income()
 
         elif choice == '7':
             pass
-            #add when budget option set
+            #monthly summary
 
         elif choice == '8':
+            pass
+            #Spending by category
+
+        elif choice == '9':
+            pass # set budget
+
+        elif choice == '10':
             print("Goodbye!")
             break
 
         else:
             print("Invalid option. Please try again.")
+
+        time.sleep(2)
+        
 
 if __name__ == "__main__":
     main()
