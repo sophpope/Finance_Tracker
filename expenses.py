@@ -8,11 +8,26 @@ class Expenses:
     def add_expense(self):
         amount = float(input("Enter expense amount: £"))
         description = input("Enter expense description:")
-        category_id = int(input("Enter category ID:"))
+
+        expense_categories_query = """SELECT category_id, name
+        FROM categories
+        WHERE type = 'expense'"""
+
+        expense_categories = self.db.fetch_all(expense_categories_query)
+        print(f"\n--- EXPENSE CATEGORIES ---")
+        for category_id, name in expense_categories:
+            print(
+                f"ID: {category_id}"
+                f"\nCategory: {name}"
+                "\n-----------------"
+            )
+    
+
+        category_id_input = int(input("Enter category ID:"))
         query = """
         INSERT INTO expenses (amount, description, category_id)
         VALUES(%s, %s, %s)"""
-        self.db.execute(query, (amount, description, category_id))
+        self.db.execute(query, (amount, description, category_id_input))
         print("Expense added successfully!")
 
     #shows all expenses, using an inner join to combine expenses and categories table
