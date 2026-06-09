@@ -8,6 +8,7 @@ class Budget:
         self.finance_report = FinanceReport(db) 
         self.expenses = Expenses(db)
         self.categories = Categories(db)
+
     
     #set a budget for the month
     def add_budget(self):
@@ -22,9 +23,12 @@ class Budget:
 
         query = """INSERT INTO budgets (category_id, amount, month, year)
         VALUES(%s, %s, %s, %s)"""
+        
+        category_name =  self.categories.get_category_name(budget_category)
+
 
         self.db.execute(query, (budget_category, amount, month, year))
-        print("Budget added successfully!")
+        print(f"{category_name} Budget added successfully!")
 
     def view_budgets(self):
         query = """SELECT b.budget_id, b.amount, c.name, b.month, b.year
@@ -52,7 +56,11 @@ class Budget:
 
         query = """DELETE FROM budgets WHERE budget_id = %s"""
 
-        self.db.execute(query, (budget_id,))
+        result = self.db.execute(query, (budget_id,))
+
+        if result is None:
+            print("ID does not exist")
+            return
 
         print(f"Budget {budget_id} removed successfully")
 

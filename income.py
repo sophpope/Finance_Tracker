@@ -2,16 +2,14 @@ class Income:
     def __init__(self, db):
         self.db = db
 
-    #adding income to the database 
-    def add_income(self):
-        amount = float(input("Enter income amount: £"))
-        description = input("Enter income description:")
-        
+
+    def income_categories(self):
         income_categories_query = """SELECT category_id, name 
         FROM categories
         WHERE type = 'income'
         """
         income_categories = self.db.fetch_all(income_categories_query)
+        
         print(f"\n--- INCOME CATEGORIES ---")
         for category_id, name in income_categories:
             print(
@@ -19,11 +17,25 @@ class Income:
                 f"\nCategory: {name}"
                 "\n-----------------"
             )
+
+    #adding income to the database 
+    def add_income(self):
+        amount = float(input("Enter income amount: £"))
+        description = input("Enter income description:")
+        
+        self.income_categories()
+
         category_id_input = int(input("Enter category ID:"))
 
         query = """INSERT INTO incomes (amount, description, category_id)
         VALUES(%s, %s, %s)"""
-        self.db.execute(query, (amount, description, category_id_input))
+
+        result = self.db.execute(query, (amount, description, category_id_input))
+
+        if result is None:
+            print("ID does not exist")
+            return
+        
         print("Income added sucessfully!")
 
     #shows all income added, using an inner join (like expenses)
@@ -52,11 +64,17 @@ class Income:
         
     #removing income
     def remove_income(self):
+
+        self.view_income()
         income_id = int(input("Please enter the Income ID you would like to remove: "))
 
         query = """DELETE FROM incomes WHERE income_id = %s"""
 
-        self.db.execute(query, (income_id,))
+        result = self.db.execute(query, (income_id,))
+
+        if result is None:
+            print("ID does not exist")
+            return
 
         print(f"Income {income_id} remove sucessfully")
 

@@ -7,6 +7,9 @@ class FinanceReport:
         month = int(input("Enter month number: "))
         year = int(input("Enter year: "))
 
+        if month or year is None or str:
+            print("Please enter a valid value")
+
         income_summary = """SELECT COALESCE(SUM(amount), 0)
         FROM incomes
         WHERE EXTRACT(MONTH FROM income_date) = %s
@@ -23,7 +26,6 @@ class FinanceReport:
         total_expenses = self.db.fetch_one(expense_summary, (month, year))[0]
 
         balance = total_income - total_expenses
-
 
         print(F"\n--- {month}/{year} SUMMARY ---")
 

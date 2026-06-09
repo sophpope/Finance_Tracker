@@ -31,8 +31,11 @@ class Expenses:
         query = """
         INSERT INTO expenses (amount, description, category_id)
         VALUES(%s, %s, %s)"""
+
+        category_name =  self.categories.get_category_name(category_id_input)
+
         self.db.execute(query, (amount, description, category_id_input))
-        print("Expense added successfully!")
+        print(f"{category_name} Expense added successfully!")
 
     #shows all expenses, using an inner join to combine expenses and categories table
     def view_expenses(self):
@@ -63,13 +66,19 @@ class Expenses:
         
     
     def remove_expense(self):
+        self.view_expenses()
+
         expense_id = int(input("Please enter the Expense ID you would like to remove: "))
 
         query = """
         DELETE FROM expenses
             WHERE expense_id = %s
             """
-        self.db.execute(query, (expense_id,))
+        result = self.db.execute(query, (expense_id,))
+
+        if result is None:
+            print("ID does not exist")
+            return
 
         print(f"Expense {expense_id} removed successfully")
 
