@@ -2,6 +2,7 @@ from db_utils import Database
 from expenses import Expenses
 from income import Income
 import time
+from finance_report import FinanceReport
 
 
 def main():
@@ -9,6 +10,7 @@ def main():
 
     expenses = Expenses(db)
     income = Income(db)
+    finance_report = FinanceReport(db)
 
     while True:
         print("\n Finance Tracker Menu:")
@@ -44,12 +46,10 @@ def main():
             income.view_income()
 
         elif choice == '7':
-            pass
-            #monthly summary
+            finance_report.monthly_summary()
 
         elif choice == '8':
-            pass
-            #Spending by category
+            finance_report.category_spending()
 
         elif choice == '9':
             pass # set budget
