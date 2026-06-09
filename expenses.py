@@ -4,11 +4,8 @@ class Expenses:
     def __init__(self, db):
         self.db = db
 
-    #adding expenses to the database, %s is used as placeholder in psycopg2
-    def add_expense(self):
-        amount = float(input("Enter expense amount: £"))
-        description = input("Enter expense description:")
-
+    #View expense categories
+    def view_expense_categories(self):
         expense_categories_query = """SELECT category_id, name
         FROM categories
         WHERE type = 'expense'"""
@@ -21,8 +18,15 @@ class Expenses:
                 f"\nCategory: {name}"
                 "\n-----------------"
             )
-    
 
+
+    #adding expenses to the database, %s is used as placeholder in psycopg2
+    def add_expense(self):
+        amount = float(input("Enter expense amount: £"))
+        description = input("Enter expense description:")
+
+        self.view_expense_categories()   
+    
         category_id_input = int(input("Enter category ID:"))
         query = """
         INSERT INTO expenses (amount, description, category_id)
