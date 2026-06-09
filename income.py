@@ -6,10 +6,24 @@ class Income:
     def add_income(self):
         amount = float(input("Enter income amount: £"))
         description = input("Enter income description:")
-        category_id = int(input("Enter category ID:"))
+        
+        income_categories_query = """SELECT category_id, name 
+        FROM categories
+        WHERE type = 'income'
+        """
+        income_categories = self.db.fetch_all(income_categories_query)
+        print(f"\n--- INCOME CATEGORIES ---")
+        for category_id, name in income_categories:
+            print(
+                f"ID: {category_id}"
+                f"\nCategory: {name}"
+                "\n-----------------"
+            )
+        category_id_input = int(input("Enter category ID:"))
+
         query = """INSERT INTO incomes (amount, description, category_id)
         VALUES(%s, %s, %s)"""
-        self.db.execute(query, (amount, description, category_id))
+        self.db.execute(query, (amount, description, category_id_input))
         print("Income added sucessfully!")
 
     #shows all income added, using an inner join (like expenses)
