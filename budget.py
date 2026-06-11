@@ -1,6 +1,7 @@
 from finance_report import FinanceReport
 from expenses import Expenses
 from categories import Categories
+import time
 
 class Budget:
     def __init__(self,db):
@@ -12,23 +13,46 @@ class Budget:
     
     #set a budget for the month
     def add_budget(self):
-        print("Please view the categories for the budget")
-        #re-using the function to view the expense categories
-        self.expenses.view_expense_categories()
+        while True:
+            try:
+                print("Please view the categories for the budget")
+                #re-using the function to view the expense categories
+                self.expenses.view_expense_categories()
 
-        budget_category = int(input("Please enter the category_id for the budget: "))
-        amount = float(input("Please enter the monthly budget you would like to set: £"))
-        month = int(input("Enter the month number for the budget: "))
-        year = int(input("Enter the year for the budget: "))
-
-        query = """INSERT INTO budgets (category_id, amount, month, year)
-        VALUES(%s, %s, %s, %s)"""
+                budget_category = int(input("Please enter the category_id for the budget: "))
+                if budget_category is None or budget_category > 16:
+                    print("Please enter a valid category_id")
+                    time.sleep(2) 
+                    continue
+                
+                amount = float(input("Please enter the monthly budget you would like to set: £"))
+                if amount <= 0:
+                    print("Budget amunt must be greater than 0")
+                    time.sleep(2)
+                    continue
+                
+                month = int(input("Enter the month number for the budget: "))
+                if month < 1 or month > 12:
+                    print("Month must be between 1 and 12")
+                    time.sleep(2)
+                    continue
+                
+                year = int(input("Enter the year for the budget: "))
         
-        category_name =  self.categories.get_category_name(budget_category)
+                
+                query = """INSERT INTO budgets (category_id, amount, month, year)
+                VALUES(%s, %s, %s, %s)"""
+            
+                category_name =  self.categories.get_category_name(budget_category)
 
 
-        self.db.execute(query, (budget_category, amount, month, year))
-        print(f"{category_name} Budget added successfully!")
+                self.db.execute(query, (budget_category, amount, month, year))
+
+                print(f"{category_name} Budget added successfully!")
+                break
+            
+            except ValueError:
+                print("Please enter a valid number")
 
     def view_budgets(self):
         query = """SELECT b.budget_id, b.amount, c.name, b.month, b.year
