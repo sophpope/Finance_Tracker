@@ -75,18 +75,25 @@ class Budget:
             )
 
     def remove_budget(self):
-        self.view_budgets()
-        budget_id = int(input("Please enter the Budget ID you would like to remove: "))
+        while True:
+            try:
+                self.view_budgets()
+                budget_id = int(input("Please enter the Budget ID you would like to remove: "))
 
-        query = """DELETE FROM budgets WHERE budget_id = %s"""
+                query = """DELETE FROM budgets WHERE budget_id = %s"""
 
-        result = self.db.execute(query, (budget_id,))
+                result = self.db.execute(query, (budget_id,))
 
-        if result is None:
-            print("ID does not exist")
-            return
+                if result is None:
+                    print("ID does not exist")
+                    time.sleep(2)
+                    continue
+                    
 
-        print(f"Budget {budget_id} removed successfully")
+                print(f"Budget {budget_id} removed successfully")
+
+            except ValueError:
+                ("Please enter a valid Budget ID")
 
     def view_monthly_budget(self):
         self.expenses.view_expense_categories()
