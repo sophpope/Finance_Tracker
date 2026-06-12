@@ -20,23 +20,25 @@ class Income:
 
     #adding income to the database 
     def add_income(self):
-        amount = float(input("Enter income amount: £"))
-        description = input("Enter income description:")
+
+        while True: 
+            amount = float(input("Enter income amount: £"))
+            description = input("Enter income description:")
         
-        self.income_categories()
+            self.income_categories()
 
-        category_id_input = int(input("Enter category ID:"))
+            category_id_input = int(input("Enter category ID:"))
 
-        query = """INSERT INTO incomes (amount, description, category_id)
-        VALUES(%s, %s, %s)"""
+            query = """INSERT INTO incomes (amount, description, category_id)
+            VALUES(%s, %s, %s)"""
 
-        result = self.db.execute(query, (amount, description, category_id_input))
+            result = self.db.execute(query, (amount, description, category_id_input))
 
-        if result is None:
-            print("ID does not exist")
-            return
-        
-        print("Income added sucessfully!")
+            if result is None:
+                print("ID does not exist")
+                return
+            
+            print("Income added sucessfully!")
 
     #shows all income added, using an inner join (like expenses)
     def view_income(self):
