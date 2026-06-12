@@ -33,7 +33,7 @@ def main():
             choice = int(input("Enter your choice (1-12): "))
 
             #change this is more options added to the list!
-            if choice <= 1 or choice >= 12:
+            if choice < 1 or choice > 12:
                 print("Please enter a choice between 1 - 12")
                 time.sleep(2)
                 continue

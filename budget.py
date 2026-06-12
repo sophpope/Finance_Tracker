@@ -20,7 +20,7 @@ class Budget:
                 self.expenses.view_expense_categories()
 
                 budget_category = int(input("Please enter the category_id for the budget: "))
-                if budget_category is None or budget_category > 16:
+                if budget_category is None or budget_category > 16 or budget_category < 1:
                     print("Please enter a valid category_id")
                     time.sleep(2) 
                     continue
@@ -96,48 +96,63 @@ class Budget:
                 ("Please enter a valid Budget ID")
 
     def view_monthly_budget(self):
-        self.expenses.view_expense_categories()
+        try:
+            while True:
+                self.expenses.view_expense_categories()
 
-        category_budget = """SELECT amount 
-        FROM budgets
-        WHERE category_id = %s
-        AND month = %s
-        AND year = %s"""
+                category_budget = """SELECT amount 
+                FROM budgets
+                WHERE category_id = %s
+                AND month = %s
+                AND year = %s"""
 
-        category_spent = """SELECT COALESCE(SUM(amount), 0)
-        FROM expenses
-        WHERE category_id = %s
-        AND EXTRACT(MONTH FROM expense_date) = %s
-        AND EXTRACT(YEAR FROM expense_date) = %s"""
+                category_spent = """SELECT COALESCE(SUM(amount), 0)
+                FROM expenses
+                WHERE category_id = %s
+                AND EXTRACT(MONTH FROM expense_date) = %s
+                AND EXTRACT(YEAR FROM expense_date) = %s"""
 
-        budget_category_id = int(input("Please enter the category_id for the budget you want to view: "))
-        month = int(input("Enter the month: "))
-        year = int(input("Enter the year: "))
-       
-        category_name =  self.categories.get_category_name(budget_category_id)
+                budget_category_id = int(input("Please enter the category_id for the budget you want to view: "))
+                #change this if any new categories are added 
+                if budget_category_id is None or budget_category_id > 16 or budget_category_id < 1:
+                    print('Please enter a valid category_id')
+                    time.sleep(2)
+                    continue 
 
-        budget_result = self.db.fetch_one(category_budget, (budget_category_id, month, year,))
+                month = int(input("Enter the month: "))
+                if month < 1 or month > 12:
+                    print("Please enter a valid month number")
+                    time.sleep(2)
 
-        if budget_result is None:
-            print("No budget found.")
-            return
-        
-        budget_amount = budget_result[0]
+                year = int(input("Enter the year: "))
+            
+                category_name =  self.categories.get_category_name(budget_category_id)
 
-        total_spent = self.db.fetch_one(category_spent, (budget_category_id, month, year,))[0]
+                budget_result = self.db.fetch_one(category_budget, (budget_category_id, month, year,))
 
-        remaining_budget = budget_amount - total_spent
+                if budget_result is None:
+                    print("No budget found.")
+                    return
+                
+                budget_amount = budget_result[0]
 
-        print(f"\n---{category_name} Budget Overview ----")
+                total_spent = self.db.fetch_one(category_spent, (budget_category_id, month, year,))[0]
 
-        print(f"\nBudget: £{budget_amount}")
-        print(f"\nSpent: £{total_spent}")
-        print(f"\nRemaining: £{remaining_budget}")
+                remaining_budget = budget_amount - total_spent
 
-        if remaining_budget < 0:
-            print(f"You are over budget by £{abs(remaining_budget)}")
+                print(f"\n---{category_name} Budget Overview ----")
 
-        else:
-            print(f"You have £{remaining_budget} remaining in {category_name} budget")
+                print(f"\nBudget: £{budget_amount}")
+                print(f"\nSpent: £{total_spent}")
+                print(f"\nRemaining: £{remaining_budget}")
+
+                if remaining_budget < 0:
+                    print(f"You are over budget by £{abs(remaining_budget)}")
+
+                else:
+                    print(f"You have £{remaining_budget} remaining in {category_name} budget")
+
+        except ValueError:
+            print("Please enter a valid value")
 
                        

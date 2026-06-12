@@ -1,8 +1,11 @@
 
+import time
+from categories import Categories
 
 class Expenses:
     def __init__(self, db):
         self.db = db
+        self.categories = Categories(db)
 
     #View expense categories
     def view_expense_categories(self):
@@ -22,20 +25,32 @@ class Expenses:
 
     #adding expenses to the database, %s is used as placeholder in psycopg2
     def add_expense(self):
-        amount = float(input("Enter expense amount: £"))
-        description = input("Enter expense description:")
+        try:
+            while True:
 
-        self.view_expense_categories()   
-    
-        category_id_input = int(input("Enter category ID:"))
-        query = """
-        INSERT INTO expenses (amount, description, category_id)
-        VALUES(%s, %s, %s)"""
+                amount = float(input("Enter expense amount: £"))
+            
+                description = input("Enter expense description:")
 
-        category_name =  self.categories.get_category_name(category_id_input)
+                self.view_expense_categories()   
+            
+                category_id_input = int(input("Enter category ID:"))
+                if category_id_input is None or category_id_input > 16 or category_id_input < 1:
+                    print("Please enter a valid category_id")
+                    time.sleep(2)
+                    continue
 
-        self.db.execute(query, (amount, description, category_id_input))
-        print(f"{category_name} Expense added successfully!")
+                query = """
+                INSERT INTO expenses (amount, description, category_id)
+                VALUES(%s, %s, %s)"""
+
+                category_name =  self.categories.get_category_name(category_id_input)
+
+                self.db.execute(query, (amount, description, category_id_input))
+                print(f"{category_name} Expense added successfully!")
+        
+        except ValueError:
+            ("Please enter a valid value")
 
     #shows all expenses, using an inner join to combine expenses and categories table
     def view_expenses(self):
@@ -66,21 +81,31 @@ class Expenses:
         
     
     def remove_expense(self):
-        self.view_expenses()
+        try:
+            while True: 
+                self.view_expenses()
 
-        expense_id = int(input("Please enter the Expense ID you would like to remove: "))
+                expense_id = int(input("Please enter the Expense ID you would like to remove: "))
+                #change this if any new expense categories are added 
+                if expense_id is None or expense_id > 18 or expense_id < 17:
+                    print("Please enter a valid expense_id")
+                    time.sleep(2)
+                    continue
 
-        query = """
-        DELETE FROM expenses
-            WHERE expense_id = %s
-            """
-        result = self.db.execute(query, (expense_id,))
+                query = """
+                DELETE FROM expenses
+                    WHERE expense_id = %s
+                    """
+                result = self.db.execute(query, (expense_id,))
 
-        if result is None:
-            print("ID does not exist")
-            return
+                if result is None:
+                    print("ID does not exist")
+                    return
 
-        print(f"Expense {expense_id} removed successfully")
+                print(f"Expense {expense_id} removed successfully")
+
+        except ValueError:
+            print("Please enter a valid value")
 
     #shows the total of all the expenses, using COALESCE to prevent null values, if no expenses
     def total_expenses(self):
