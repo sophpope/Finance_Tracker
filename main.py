@@ -38,40 +38,40 @@ def main():
                 time.sleep(2)
                 continue
 
-            if choice == '1':
+            if choice == 1:
                 expenses.add_expense()
 
-            elif choice == '2':
+            elif choice == 2:
                 expenses.remove_expense()
 
-            elif choice == '3':
+            elif choice == 3:
                 expenses.view_expenses()
 
-            elif choice == '4':
+            elif choice == 4:
                 income.add_income()
 
-            elif choice == '5':
+            elif choice == 5:
                 income.remove_income()
 
-            elif choice == '6':
+            elif choice == 6:
                 income.view_income()
 
-            elif choice == '7':
+            elif choice == 7:
                 finance_report.monthly_summary()
 
-            elif choice == '8':
+            elif choice == 8:
                 finance_report.category_spending()
 
-            elif choice == '9':
+            elif choice == 9:
                 budget.add_budget()
 
-            elif choice == '10':
+            elif choice == 10:
                 budget.remove_budget()
 
-            elif choice == '11':
+            elif choice == 11:
                 budget.view_monthly_budget()
 
-            elif choice == '12':
+            elif choice == 12:
                 print("Goodbye!")
                 break
 
