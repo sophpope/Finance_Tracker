@@ -91,6 +91,7 @@ class Budget:
                     
 
                 print(f"Budget {budget_id} removed successfully")
+                break
 
             except ValueError:
                 ("Please enter a valid Budget ID")
@@ -98,7 +99,7 @@ class Budget:
     def view_monthly_budget(self):
         try:
             while True:
-                self.expenses.view_expense_categories()
+                self.categories.view_expense_categories()
 
                 category_budget = """SELECT amount 
                 FROM budgets
@@ -123,6 +124,7 @@ class Budget:
                 if month < 1 or month > 12:
                     print("Please enter a valid month number")
                     time.sleep(2)
+                    continue
 
                 year = int(input("Enter the year: "))
             
@@ -151,6 +153,8 @@ class Budget:
 
                 else:
                     print(f"You have £{remaining_budget} remaining in {category_name} budget")
+
+                break
 
         except ValueError:
             print("Please enter a valid value")

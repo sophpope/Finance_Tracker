@@ -7,20 +7,6 @@ class Expenses:
         self.db = db
         self.categories = Categories(db)
 
-    #View expense categories
-    def view_expense_categories(self):
-        expense_categories_query = """SELECT category_id, name
-        FROM categories
-        WHERE type = 'expense'"""
-
-        expense_categories = self.db.fetch_all(expense_categories_query)
-        print(f"\n--- EXPENSE CATEGORIES ---")
-        for category_id, name in expense_categories:
-            print(
-                f"ID: {category_id}"
-                f"\nCategory: {name}"
-                "\n-----------------"
-            )
 
 
     #adding expenses to the database, %s is used as placeholder in psycopg2
@@ -29,10 +15,18 @@ class Expenses:
             while True:
 
                 amount = float(input("Enter expense amount: £"))
+                if amount <= 0:
+                    print("Please enter a value higher than £")
+                    time.sleep(2)
+                    continue
             
                 description = input("Enter expense description:")
+                if description.strip() == "":
+                    print("Please enter an expense description")
+                    time.sleep(2)
+                    continue
 
-                self.view_expense_categories()   
+                self.categories.view_expense_categories()   
             
                 category_id_input = int(input("Enter category ID:"))
                 if category_id_input is None or category_id_input > 16 or category_id_input < 1:
@@ -48,6 +42,7 @@ class Expenses:
 
                 self.db.execute(query, (amount, description, category_id_input))
                 print(f"{category_name} Expense added successfully!")
+                break
         
         except ValueError:
             ("Please enter a valid value")
@@ -85,9 +80,8 @@ class Expenses:
             while True: 
                 self.view_expenses()
 
-                expense_id = int(input("Please enter the Expense ID you would like to remove: "))
-                #change this if any new expense categories are added 
-                if expense_id is None or expense_id > 18 or expense_id < 17:
+                expense_id = int(input("Please enter the Expense ID you would like to remove: ")) 
+                if expense_id is None:
                     print("Please enter a valid expense_id")
                     time.sleep(2)
                     continue
@@ -96,13 +90,10 @@ class Expenses:
                 DELETE FROM expenses
                     WHERE expense_id = %s
                     """
-                result = self.db.execute(query, (expense_id,))
-
-                if result is None:
-                    print("ID does not exist")
-                    return
+                self.db.execute(query, (expense_id,))
 
                 print(f"Expense {expense_id} removed successfully")
+                break
 
         except ValueError:
             print("Please enter a valid value")

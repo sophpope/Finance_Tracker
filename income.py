@@ -1,44 +1,45 @@
+from categories import Categories
+import time
+
 class Income:
     def __init__(self, db):
         self.db = db
+        self.categories = Categories(db)
 
-
-    def income_categories(self):
-        income_categories_query = """SELECT category_id, name 
-        FROM categories
-        WHERE type = 'income'
-        """
-        income_categories = self.db.fetch_all(income_categories_query)
-        
-        print(f"\n--- INCOME CATEGORIES ---")
-        for category_id, name in income_categories:
-            print(
-                f"ID: {category_id}"
-                f"\nCategory: {name}"
-                "\n-----------------"
-            )
 
     #adding income to the database 
     def add_income(self):
 
         while True: 
             amount = float(input("Enter income amount: £"))
+            if amount <= 0:
+                print("Please enter an amount above £0")
+                time.sleep(2)
+                continue
+
             description = input("Enter income description:")
+            if description.strip() == "":
+                print("Please enter a income description")
+                time.sleep(2)
+                continue
         
-            self.income_categories()
+            self.categories.income_categories()
 
             category_id_input = int(input("Enter category ID:"))
+
+            #change this if more income categories are added to the database
+            if category_id_input is None or category_id_input > 20 or category_id_input < 17:
+                print("Please add a valid income category_id")
+                time.sleep(2)
+                continue
 
             query = """INSERT INTO incomes (amount, description, category_id)
             VALUES(%s, %s, %s)"""
 
             result = self.db.execute(query, (amount, description, category_id_input))
-
-            if result is None:
-                print("ID does not exist")
-                return
             
             print("Income added sucessfully!")
+            break
 
     #shows all income added, using an inner join (like expenses)
     def view_income(self):
@@ -66,19 +67,24 @@ class Income:
         
     #removing income
     def remove_income(self):
+        try:
+            while True:
 
-        self.view_income()
-        income_id = int(input("Please enter the Income ID you would like to remove: "))
+                self.view_income()
 
-        query = """DELETE FROM incomes WHERE income_id = %s"""
+                income_id = int(input("Please enter the Income ID you would like to remove: "))
+                
 
-        result = self.db.execute(query, (income_id,))
 
-        if result is None:
-            print("ID does not exist")
-            return
+                query = """DELETE FROM incomes WHERE income_id = %s"""
 
-        print(f"Income {income_id} remove sucessfully")
+                result = self.db.execute(query, (income_id,))
+
+                print(f"Income {income_id} remove sucessfully")
+                break
+
+        except ValueError:
+            print("Please enter a valid value")
 
 
 
