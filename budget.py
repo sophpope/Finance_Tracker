@@ -78,17 +78,18 @@ class Budget:
         while True:
             try:
                 self.view_budgets()
+
                 budget_id = int(input("Please enter the Budget ID you would like to remove: "))
+                if not self.categories.check_item_exists("budgets", "budget_id", budget_id):
+                    print("Budget ID does not exist")
+                    time.sleep(2)
+                    continue
+
 
                 query = """DELETE FROM budgets WHERE budget_id = %s"""
 
-                result = self.db.execute(query, (budget_id,))
+                self.db.execute(query, (budget_id,))
 
-                if result is None:
-                    print("ID does not exist")
-                    time.sleep(2)
-                    continue
-                    
 
                 print(f"Budget {budget_id} removed successfully")
                 break

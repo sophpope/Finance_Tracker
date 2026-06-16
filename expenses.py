@@ -81,8 +81,8 @@ class Expenses:
                 self.view_expenses()
 
                 expense_id = int(input("Please enter the Expense ID you would like to remove: ")) 
-                if expense_id is None:
-                    print("Please enter a valid expense_id")
+                if not self.categories.check_item_exists("expenses", "expense_id", expense_id):
+                    print("Expense ID does not exist")
                     time.sleep(2)
                     continue
 
