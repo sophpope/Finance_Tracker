@@ -63,10 +63,14 @@ class Categories:
 
     def check_item_exists(self, table_name, id_column_name, item_id):
         query = f"""
-        SELECT {table_name} 
-        FROM {id_column_name} 
-        WHERE {item_id}"""
+        SELECT * 
+        FROM {table_name} 
+        WHERE {id_column_name} = %s """
 
-        result = self.db.fetch_one(query(item_id,))
+        result = self.db.fetch_one(query, (item_id,))
 
-        
+        print(f"{result}")
+
+
+    def item_exist(self):
+        self.check_item_exists("incomes", "income_id", 2)
