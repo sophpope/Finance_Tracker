@@ -73,12 +73,15 @@ class Income:
                 self.view_income()
 
                 income_id = int(input("Please enter the Income ID you would like to remove: "))
-                
 
+                if not self.categories.check_item_exists("incomes", "income_id", income_id):
+                    print("Income ID does not exist")
+                    time.sleep(2)
+                    continue
 
                 query = """DELETE FROM incomes WHERE income_id = %s"""
 
-                result = self.db.execute(query, (income_id,))
+                self.db.execute(query, (income_id,))
 
                 print(f"Income {income_id} remove sucessfully")
                 break

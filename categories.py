@@ -1,4 +1,7 @@
+import time
+
 class Categories:
+    
     def __init__(self, db):
         self.db = db
 
@@ -69,8 +72,7 @@ class Categories:
 
         result = self.db.fetch_one(query, (item_id,))
 
-        print(f"{result}")
-
-
-    def item_exist(self):
-        self.check_item_exists("incomes", "income_id", 2)
+        if result is None:
+            return False
+        
+        return True
