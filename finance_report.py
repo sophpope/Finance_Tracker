@@ -17,10 +17,14 @@ class FinanceReport:
                     continue 
 
                 year = int(input("Enter year: "))
+                
+                income_exists = self.categories.check_valid_date("incomes", "income_date", month, year)
+                expenses_exist = self.categories.check_valid_date("expenses", 'expense_date', month, year)
 
-                if month or year is None or str:
-                    print("Please enter a valid value")
-                    
+                if not income_exists and not expenses_exist:
+                    print("No records found for that month and year")
+                    time.sleep(2)
+                    continue
 
                 income_summary = """SELECT COALESCE(SUM(amount), 0)
                 FROM incomes
@@ -58,7 +62,7 @@ class FinanceReport:
                 self.categories.view_expense_categories()
 
                 
-                selected_category_id = input("\nEnter the category_id you would like view: ")
+                selected_category_id = int(input("\nEnter the category_id you would like view: "))
 
                 if selected_category_id is None or selected_category_id > 16 or selected_category_id < 1:
                     print("Please enter a valid category_id")
@@ -73,14 +77,22 @@ class FinanceReport:
                 ORDER BY e.expense_date DESC
                 """
 
-                category_all = self.db.fetch_all(category_summary, (selected_category_id))
+                category_all = self.db.fetch_all(category_summary, (selected_category_id,))
+                
+                expense_records = self.categories.check_category_records("expenses", selected_category_id)
+                income_records = self.categories.check_category_records("incomes", selected_category_id)
+                
+                category_name = self.categories.get_category_name(selected_category_id)
 
-                if not category_all:
-                    print("No expenses/income found")
-                    return
+
+                if not expense_records and not income_records:
+                    print(f"No {category_name} records found")
+                    time.sleep(3)
+                    continue
 
 
-                print("--- Category Overview ---")
+
+                print(f"--- {category_name} Category Overview ---")
 
                 for expense_id, amount, description, category, expense_date in category_all:
                     print(

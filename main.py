@@ -4,6 +4,7 @@ from income import Income
 import time
 from finance_report import FinanceReport
 from budget import Budget
+from categories import Categories
 
 
 def main():
@@ -13,6 +14,7 @@ def main():
     income = Income(db)
     finance_report = FinanceReport(db)
     budget = Budget(db)
+    categories = Categories(db)
 
     while True:
         try:
@@ -27,8 +29,9 @@ def main():
             print("8. View Spending by Category")
             print("9. Add Budget")
             print("10. Remove Budget")
-            print("11. Monthly Budget Overview")
-            print("12. Exit")
+            print("11. Monthly Budget by Category")
+            print("12. View all Budgets")
+            print("13. Exit")
 
             choice = int(input("Enter your choice (1-12): "))
 
@@ -69,9 +72,12 @@ def main():
                 budget.remove_budget()
 
             elif choice == 11:
-                budget.view_monthly_budget()
+                budget.view_monthly_budget_category()
 
             elif choice == 12:
+                budget.view_budgets()
+
+            elif choice == 13:
                 print("Goodbye!")
                 break
 

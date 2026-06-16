@@ -17,7 +17,7 @@ class Budget:
             try:
                 print("Please view the categories for the budget")
                 #re-using the function to view the expense categories
-                self.expenses.view_expense_categories()
+                self.categories.view_expense_categories()
 
                 budget_category = int(input("Please enter the category_id for the budget: "))
                 if budget_category is None or budget_category > 16 or budget_category < 1:
@@ -97,7 +97,7 @@ class Budget:
             except ValueError:
                 ("Please enter a valid Budget ID")
 
-    def view_monthly_budget(self):
+    def view_monthly_budget_category(self):
         try:
             while True:
                 self.categories.view_expense_categories()
@@ -160,4 +160,4 @@ class Budget:
         except ValueError:
             print("Please enter a valid value")
 
-                       
+        

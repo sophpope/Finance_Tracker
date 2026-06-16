@@ -76,3 +76,27 @@ class Categories:
             return False
         
         return True
+    
+    def check_valid_date(self, table_name, date_column, month, year):
+        #checking if any records exist for the date entered, so it doesn' return empty results - ONLY VIEWING ONE TO CHECK
+        query = f"""SELECT 1 
+        FROM {table_name} WHERE EXTRACT(MONTH FROM {date_column}) = %s
+        AND EXTRACT(YEAR FROM {date_column}) = %s
+        LIMIT 1"""
+
+        result = self.db.fetch_one(query, (month, year,))
+
+        if result is None:
+            return False
+    
+        return True
+    
+    def check_category_records(self, table_name, category_id):
+        query = f"""SELECT 1 FROM {table_name} WHERE category_id = %s"""
+
+        result = self.db.fetch_one(query, (category_id, ))
+
+        if result is None:
+            return False
+        
+        return True
