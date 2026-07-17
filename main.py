@@ -33,11 +33,11 @@ def main():
             print("12. View all Budgets")
             print("13. Exit")
 
-            choice = int(input("Enter your choice (1-12): "))
+            choice = int(input("Enter your choice (1-13): "))
 
             #change this is more options added to the list!
-            if choice < 1 or choice > 12:
-                print("Please enter a choice between 1 - 12")
+            if choice < 1 or choice > 13:
+                print("Please enter a choice between 1 - 13")
                 time.sleep(2)
                 continue
 
@@ -87,7 +87,7 @@ def main():
             time.sleep(2)
         
         except ValueError:
-            print("Please enter a number between 1-12")
+            print("Please enter a number between 1-13")
         
 
 if __name__ == "__main__":
